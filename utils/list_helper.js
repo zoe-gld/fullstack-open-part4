@@ -22,18 +22,28 @@ const mostBlogs = (blogs) => {
     return 'There are no blogs in your list'
   }
   const authors = lodash.groupBy(blogs, 'author')
-  const result = Object.values(authors).reduce((acc, val, index) => {
+  return Object.values(authors).reduce((acc, val, index) => {
     if (val.length > acc['blogs']) {
       acc['author'] = Object.keys(authors)[index]
       acc['blogs'] = val.length
     }
     return acc
   }, { 'blogs': 0 })
-  return result
 }
 
 const mostLikes = (blogs) => {
-  return blogs
+  if (lodash.isEmpty(blogs)) {
+    return 'There are no blogs in your list'
+  }
+  const authors = lodash.groupBy(blogs, 'author')
+  return Object.values(authors).reduce((acc, val, index) => {
+    const totalLikes = val.reduce((likes, blog) => likes + blog.likes, 0)
+    if (totalLikes > acc['likes']) {
+      acc['author'] = Object.keys(authors)[index]
+      acc['likes'] = totalLikes
+    }
+    return acc
+  }, { 'likes': 0 })
 }
 
 module.exports = {
