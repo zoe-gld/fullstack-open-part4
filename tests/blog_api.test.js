@@ -61,6 +61,22 @@ test('a valid blog can be added', async () => {
   expect(titles).toContain(
     'First class tests'
   )
+  expect(response.body.find(blog => blog.title === 'First class tests').likes).toEqual(10)
+})
+
+test('if the likes property is missing from the POST request, it defaults to the value 0', async () => {
+  const newBlogWithoutLikes = {
+    title: 'TDD harms architecture',
+    author: 'Robert C. Martin',
+    url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html'
+  }
+
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlogWithoutLikes)
+
+  expect(response.body.likes).toEqual(0)
+
 })
 
 afterAll(() => {
