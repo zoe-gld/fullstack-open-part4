@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-
 const api = supertest(app)
+
 const Blog = require('../models/blog')
 const helper = require('./test_helper')
 
@@ -12,7 +12,7 @@ beforeEach(async () => {
   const promiseArray = blogObjects.map(blog => blog.save())
   await Promise.all(promiseArray)})
 
-describe('get /api/blogs', () => {
+describe('GET /api/blogs', () => {
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -41,7 +41,7 @@ describe('get /api/blogs', () => {
   })
 })
 
-describe('post /api/blogs', () => {
+describe('POST /api/blogs', () => {
   test('a valid blog can be added', async () => {
     const newBlog = {
       title: 'First class tests',
@@ -93,7 +93,7 @@ describe('post /api/blogs', () => {
   })
 })
 
-describe('delete /api/blogs/:id', () => {
+describe('DELETE /api/blogs/:id', () => {
   test('succeeds with status code 204 if id is valid', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
@@ -114,7 +114,7 @@ describe('delete /api/blogs/:id', () => {
   })
 })
 
-describe('put /api/blogs/:id', () => {
+describe('PUT /api/blogs/:id', () => {
   test('succeeds with status code 200 if id is valid', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToUpdate = blogsAtStart[0]
