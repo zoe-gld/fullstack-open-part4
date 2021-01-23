@@ -22,12 +22,12 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
 
-  // const token = getTokenFrom(request)
-  // const decodedToken = jwt.verify(token, process.env.SECRET)
-  // if (!token || !decodedToken.id) {
-  //   return response.status(401).json({ error: 'token missing or invalid' })
-  // }
-  const user = await User.findOne({})
+  const token = getTokenFrom(request)
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+  const user = await User.findById(decodedToken.id)
 
   const blog = new Blog({
     title: body.title,
@@ -38,7 +38,7 @@ blogsRouter.post('/', async (request, response) => {
   })
 
   if (!blog.title && !blog.url) {
-    return response.status(400).send('Bad Request')
+    return response.status(400).json({ error: 'blogs must have either a title or a url' })
   }
 
   const savedBlog = await blog.save()
